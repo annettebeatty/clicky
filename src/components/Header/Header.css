@@ -1,0 +1,14 @@
+.jumbotron {
+    background-color: #20315A;
+    color: white;
+    margin: 0 auto;
+    margin-top: 85px;
+}
+
+.title {
+    font-size: 60px;
+}
+
+* {
+    font-family: sans-serif;
+}
