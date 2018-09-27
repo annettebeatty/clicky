@@ -9,13 +9,40 @@ class Search extends Component {
   state = {
     score: 0,
     topScore: 0,
-    results: []
+    images: []
   };
 
    // When this component mounts, search the Giphy API for pictures of kittens
    componentDidMount() {
-    this.searchGiphy("kittens");
+     console.log("Loading array");
+     this.loadArray();
+     console.log("State: ", this.state.results);
+    // this.searchGiphy("kittens");
   }
+
+  // Need something to load the array
+  loadArray = () => {
+    var imageArray = [];
+
+    for (let i=1; i < 13; i++)
+    {
+      imageArray.push({
+        id: i,
+        imageUrl: "./assets/images/puppy" + i + ".jpg",
+        state: false
+      });
+    }
+
+    this.setState({results: imageArray}, function () {
+      console.log("Set State", this.state.results);
+    });
+  }
+
+  renderPage = () => {
+    if (this.state.results) {
+      return <Results results={this.state.results}/>;
+    }
+  };
 
   searchGiphy = query => {
     API.search(query)
@@ -41,9 +68,7 @@ class Search extends Component {
         />
         <Header
         />
-        <Results
-          results={this.state.results}
-        />
+        {this.renderPage()}
       </div>
     );
   }
