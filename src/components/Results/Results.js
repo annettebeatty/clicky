@@ -7,8 +7,10 @@ const Results= props => (
             {props.results.map(result => 
             <div className="columnn col-md-3" key={result.id}>
                 <img
+                name="clicked" value={result.id}
                 alt={result.imageUrl}
                 src={result.imageUrl}
+                onClick={ () => props.handleClick(result.id) }
                 />
             </div>
             )}

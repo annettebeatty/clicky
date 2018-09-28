@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Nav from "../Navbar/Navbar"
 import Header from "../Header/Header"
-import API from "../utils/API";
 import Results from "../Results/Results"
 
 class Search extends Component {
@@ -9,14 +8,21 @@ class Search extends Component {
   state = {
     score: 0,
     topScore: 0,
-    images: []
+    images: [],
+    clicked: 0
   };
 
    // When this component mounts, search the Giphy API for pictures of kittens
    componentDidMount() {
      console.log("Loading array");
      this.loadArray();
-     console.log("State: ", this.state.results);
+
+     /*
+     var req = require.context("./assets/images", false, /.*\.jpg$/);
+      req.keys().forEach(function(key){
+         req(key);
+     });
+     */
     // this.searchGiphy("kittens");
   }
 
@@ -24,7 +30,7 @@ class Search extends Component {
   loadArray = () => {
     var imageArray = [];
 
-    for (let i=1; i < 13; i++)
+    for (let i=0; i < 12; i++)
     {
       imageArray.push({
         id: i,
@@ -36,27 +42,46 @@ class Search extends Component {
     this.setState({results: imageArray}, function () {
       console.log("Set State", this.state.results);
     });
+
+    this.setState({ score: 0 });
   }
 
-  renderPage = () => {
+  renderPage = event => {
     if (this.state.results) {
-      return <Results results={this.state.results}/>;
+      return <Results results={this.state.results} handleClick={this.handleClick} />;
     }
   };
 
-  searchGiphy = query => {
-    API.search(query)
-      .then(res => this.setState({ results: res.data.data }))
-      /*
-      .then (function(res) {
-        console.log(res.data.data);
-        this.setState({
-          results: res.data.data
-        });
+  // Clicked an image
+  handleClick = id => {
+    console.log("Clicked ", id);
+
+    console.log("Results ", this.state.results[id]);
+
+    // Check if we've clicked before
+    if (this.state.results[id].state === false)
+    {
+      // Not clicked, set clicked element to true
+      let objChange = {
+        id: id,
+        imageUrl: this.state.results[id].imageUrl,
+        state: true
       }
-      )
-      */
-      .catch(err => console.log(err));
+      this.state.results.splice(id, 1, objChange);
+      console.log("Results ", this.state.results);
+
+      // Add to score
+      let score = this.state.score + 1;
+      this.setState ({ score: score });
+
+    }
+    else {
+    // Lost - picked a previous picture, reset game
+      if (this.state.score > this.state.topScore)
+        this.setState ({ topScore: this.state.score });
+        
+      this.loadArray();
+    }
   };
 
   render() {
