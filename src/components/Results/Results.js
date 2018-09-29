@@ -5,7 +5,7 @@ const Results= props => (
     <ul className="list-group">
         <div className="row">
             {props.images.map(result => 
-            <div className="columnn col-md-3" key={result.id}>
+            <div className="column col-md-3" key={result.id}>
                 <img
                 name="clicked" value={result.id}
                 alt={result.imageUrl}
@@ -13,7 +13,7 @@ const Results= props => (
                 onClick={ () => props.handleClick(result.id) }
                 />
             </div>
-            )}
+            )} 
         </div>
     </ul>
 );
